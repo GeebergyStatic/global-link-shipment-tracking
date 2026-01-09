@@ -3,8 +3,9 @@ const mongoose = require('mongoose');
 const paymentSchema = new mongoose.Schema({
     crypto: {
         address: { type: String, required: true },
+        coinType: { type: String, required: true },  // e.g., BTC, ETH, SOL
         qrUrl: { type: String, required: true }
-    }
+    },
 }, { timestamps: true });
 
 // Ensure only one document exists
