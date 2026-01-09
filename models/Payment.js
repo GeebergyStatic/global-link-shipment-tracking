@@ -5,15 +5,15 @@ const paymentSchema = new mongoose.Schema({
         address: { type: String, required: true },
         coinType: { type: String, required: true },  // e.g., BTC, ETH, SOL
         qrUrl: { type: String, required: true }
-    },
+    }
 }, { timestamps: true });
 
-// Ensure only one document exists
+// Singleton pattern: ensures only one payment document exists
 paymentSchema.statics.getInstance = async function () {
     let payment = await this.findOne();
     if (!payment) {
         payment = await this.create({
-            crypto: { address: '', qrUrl: '' }
+            crypto: { address: '', coinType: '', qrUrl: '' }
         });
     }
     return payment;
