@@ -15,13 +15,19 @@ router.get('/', async (req, res) => {
 // GET one shipment
 router.get('/:trackingId', async (req, res) => {
     try {
-        const shipment = await Shipment.findOne({ trackingId: req.params.trackingId });
+        const trackingId = req.params.trackingId.trim().toLowerCase();
+
+        // Use a regex for case-insensitive search
+        const shipment = await Shipment.findOne({ trackingId: new RegExp(`^${trackingId}$`, 'i') });
+
         if (!shipment) return res.status(404).json({ message: 'Shipment not found' });
+
         res.json(shipment);
     } catch (err) {
         res.status(500).json({ message: err.message });
     }
 });
+
 
 // POST create shipment
 router.post('/', async (req, res) => {
