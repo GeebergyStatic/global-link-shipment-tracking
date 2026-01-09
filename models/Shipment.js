@@ -41,13 +41,10 @@ const shipmentDetailsSchema = new mongoose.Schema({
 const invoiceSchema = new mongoose.Schema({
     number: String,
     date: String,
-    total: String,
-    items: [{
-        image: String,
-        description: String,
-        quantity: Number,
-        total: String
-    }]
+    image: String,
+    description: String,
+    quantity: Number,
+    total: String
 });
 
 const shipmentSchema = new mongoose.Schema({

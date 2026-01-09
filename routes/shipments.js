@@ -25,30 +25,43 @@ router.get('/:trackingId', async (req, res) => {
 
 // POST create shipment
 router.post('/', async (req, res) => {
-    const shipment = new Shipment({
-        trackingId: req.body.trackingId,
-        history: [{
-            date: new Date(),
-            location: req.body.shipmentDetails.origin,
-            status: req.body.shipmentDetails.status,
-            notes: 'Shipment created'
-        }],
-        shipper: req.body.shipper,
-        receiver: req.body.receiver,
-        shipmentDetails: {
-            ...req.body.shipmentDetails,
-            paymentMode: "Crypto & Wire Transfer"
-        },
-        invoice: req.body.invoice || { number: '', date: '', total: '', items: [] }
-    });
-
     try {
+        const shipment = new Shipment({
+            trackingId: req.body.trackingId,
+
+            history: [{
+                date: new Date(),
+                location: req.body.shipmentDetails.origin,
+                status: req.body.shipmentDetails.status,
+                notes: 'Shipment created'
+            }],
+
+            shipper: req.body.shipper,
+            receiver: req.body.receiver,
+
+            shipmentDetails: {
+                ...req.body.shipmentDetails,
+                paymentMode: "Crypto & Wire Transfer"
+            },
+
+            invoice: {
+                number: req.body.invoice?.number || '',
+                date: req.body.invoice?.date || '',
+                image: req.body.invoice?.image || '',
+                description: req.body.invoice?.description || '',
+                quantity: req.body.invoice?.quantity || 1,
+                total: req.body.invoice?.total || ''
+            }
+        });
+
         const newShipment = await shipment.save();
         res.status(201).json(newShipment);
+
     } catch (err) {
         res.status(400).json({ message: err.message });
     }
 });
+
 
 // PATCH update shipment
 router.patch('/:trackingId', async (req, res) => {
