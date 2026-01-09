@@ -33,7 +33,7 @@ router.post('/', async (req, res) => {
                 date: new Date(),
                 location: req.body.shipmentDetails.origin,
                 status: req.body.shipmentDetails.status,
-                notes: 'Shipment created'
+                notes: req.body.historyNotes || 'Shipment sent out!'
             }],
 
             shipper: req.body.shipper,
@@ -84,7 +84,7 @@ router.patch('/:trackingId', async (req, res) => {
                 date: new Date(),
                 location: shipment.shipmentDetails.destination,
                 status: newStatus,
-                notes: req.body.statusNotes || 'Status updated by admin'
+                notes: req.body.statusNotes || 'Status updated'
             });
         }
 
