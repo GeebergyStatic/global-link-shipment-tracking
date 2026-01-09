@@ -1,19 +1,21 @@
 const mongoose = require('mongoose');
 
+const cryptoSchema = new mongoose.Schema({
+    address: { type: String, required: true },
+    coinType: { type: String, required: true },
+    qrUrl: { type: String, required: true }
+});
+
 const paymentSchema = new mongoose.Schema({
-    crypto: {
-        address: { type: String, required: true },
-        coinType: { type: String, required: true },  // e.g., BTC, ETH, SOL
-        qrUrl: { type: String, required: true }
-    }
+    crypto: { type: cryptoSchema, required: true }
 }, { timestamps: true });
 
-// Singleton pattern: ensures only one payment document exists
+// Singleton pattern
 paymentSchema.statics.getInstance = async function () {
     let payment = await this.findOne();
     if (!payment) {
         payment = await this.create({
-            crypto: { address: '', coinType: '', qrUrl: '' }
+            crypto: { address: 'TEMP', coinType: 'TEMP', qrUrl: 'TEMP' }
         });
     }
     return payment;

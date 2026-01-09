@@ -24,12 +24,14 @@ router.put('/', async (req, res) => {
             return res.status(400).json({ message: 'All crypto fields are required.' });
         }
 
-        // Always update the singleton document
         const payment = await Payment.getInstance();
 
-        payment.crypto.address = crypto.address;
-        payment.crypto.coinType = crypto.coinType;
-        payment.crypto.qrUrl = crypto.qrUrl;
+        // Overwrite subdocument entirely
+        payment.crypto = {
+            address: crypto.address,
+            coinType: crypto.coinType,
+            qrUrl: crypto.qrUrl
+        };
 
         await payment.save();
         res.json(payment);
@@ -38,5 +40,6 @@ router.put('/', async (req, res) => {
         res.status(500).json({ message: 'Failed to save crypto payment.', error: err.message });
     }
 });
+
 
 module.exports = router;
