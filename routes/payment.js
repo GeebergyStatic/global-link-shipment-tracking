@@ -18,6 +18,8 @@ router.put('/', async (req, res) => {
     try {
         const { crypto } = req.body;
 
+        console.log('Received crypto payment update:', crypto);
+
         if (!crypto || !crypto.address || !crypto.coinType || !crypto.qrUrl) {
             return res.status(400).json({ message: 'All crypto fields are required.' });
         }
