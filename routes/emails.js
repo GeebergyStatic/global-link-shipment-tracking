@@ -1,3 +1,5 @@
+const express = require('express');
+const router = express.Router();
 import { Resend } from 'resend';
 
 const resend = new Resend(process.env.RESEND_API_KEY);
