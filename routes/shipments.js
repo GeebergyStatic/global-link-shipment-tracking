@@ -100,6 +100,7 @@ router.patch('/:trackingId', async (req, res) => {
 
         if (statusChanged || destinationChanged) {
             let note = req.body.history.notes;
+            console.log(req.body)
 
             if (!note) {
                 if (statusChanged && destinationChanged) {
