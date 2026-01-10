@@ -72,11 +72,19 @@ router.post('/', async (req, res) => {
 // PATCH update shipment
 router.patch('/:trackingId', async (req, res) => {
     try {
-        const shipment = await Shipment.findOne({ trackingId: req.params.trackingId });
-        if (!shipment) return res.status(404).json({ message: 'Shipment not found' });
+        const shipment = await Shipment.findOne({
+            trackingId: req.params.trackingId
+        });
+
+        if (!shipment) {
+            return res.status(404).json({ message: 'Shipment not found' });
+        }
 
         const oldStatus = shipment.shipmentDetails.status;
+        const oldDestination = shipment.shipmentDetails.destination;
+
         const newStatus = req.body.shipmentDetails?.status;
+        const newDestination = req.body.shipmentDetails?.destination;
 
         // Update fields
         Object.assign(shipment.shipper, req.body.shipper || {});
@@ -84,13 +92,30 @@ router.patch('/:trackingId', async (req, res) => {
         Object.assign(shipment.shipmentDetails, req.body.shipmentDetails || {});
         Object.assign(shipment.invoice, req.body.invoice || {});
 
-        // Add to history if status changed
-        if (newStatus && newStatus !== oldStatus) {
+        const statusChanged =
+            newStatus && newStatus !== oldStatus;
+
+        const destinationChanged =
+            newDestination && newDestination !== oldDestination;
+
+        if (statusChanged || destinationChanged) {
+            let note = req.body.statusNotes;
+
+            if (!note) {
+                if (statusChanged && destinationChanged) {
+                    note = `Status changed to "${newStatus}" and destination updated`;
+                } else if (statusChanged) {
+                    note = `Status changed to "${newStatus}"`;
+                } else {
+                    note = `Destination updated to ${newDestination}`;
+                }
+            }
+
             shipment.history.unshift({
                 date: new Date(),
-                location: shipment.shipmentDetails.destination,
-                status: newStatus,
-                notes: req.body.statusNotes || 'Status updated'
+                location: newDestination || oldDestination,
+                status: newStatus || oldStatus,
+                notes: note
             });
         }
 
@@ -100,6 +125,7 @@ router.patch('/:trackingId', async (req, res) => {
         res.status(400).json({ message: err.message });
     }
 });
+
 
 // DELETE shipment
 router.delete('/:trackingId', async (req, res) => {
