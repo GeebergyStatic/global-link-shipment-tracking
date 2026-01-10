@@ -12,6 +12,7 @@ app.use(express.json());
 // Routes
 app.use('/api/admin/payment', require('./routes/payment'));
 app.use('/api/admin/shipments', require('./routes/shipments'));
+app.use('/api/user/email', require('./routes/emails'));
 
 // Connect to MongoDB
 mongoose.connect(process.env.MONGODB_URI)
