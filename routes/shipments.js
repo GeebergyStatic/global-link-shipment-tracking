@@ -40,7 +40,7 @@ router.post('/', async (req, res) => {
                 date: new Date(),
                 location: req.body.shipmentDetails.origin,
                 status: req.body.shipmentDetails.status,
-                notes: req.body.shipmentDetails.historyNotes || 'Shipment sent out!'
+                notes: req.body.history?.[0]?.notes ?? 'Shipment sent out!'
             }],
 
             shipper: req.body.shipper,
@@ -100,8 +100,7 @@ router.patch('/:trackingId', async (req, res) => {
             newDestination && newDestination !== oldDestination;
 
         if (statusChanged || destinationChanged) {
-            let note = req.body.history.notes;
-            console.log(`backend patch history: ${JSON.stringify(req.body.history)}`)
+            let note = req.body.history?.[0]?.notes;
 
             if (!note) {
                 if (statusChanged && destinationChanged) {
