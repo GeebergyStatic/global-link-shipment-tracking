@@ -101,7 +101,7 @@ router.patch('/:trackingId', async (req, res) => {
 
         if (statusChanged || destinationChanged) {
             let note = req.body.history.notes;
-            console.log(`backend patch data: ${JSON.stringify(req.body)}`)
+            console.log(`backend patch history: ${JSON.stringify(req.body.history)}`)
 
             if (!note) {
                 if (statusChanged && destinationChanged) {
