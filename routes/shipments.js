@@ -39,7 +39,7 @@ router.post('/', async (req, res) => {
                 date: new Date(),
                 location: req.body.shipmentDetails.origin,
                 status: req.body.shipmentDetails.status,
-                notes: req.body.historyNotes || 'Shipment sent out!'
+                notes: req.body.shipmentDetails.historyNotes || 'Shipment sent out!'
             }],
 
             shipper: req.body.shipper,
