@@ -32,6 +32,7 @@ router.get('/:trackingId', async (req, res) => {
 // POST create shipment
 router.post('/', async (req, res) => {
     try {
+        console.log(`Shipping Details: ${req.body.shipmentDetails} `)
         const shipment = new Shipment({
             trackingId: req.body.trackingId,
 
@@ -100,7 +101,7 @@ router.patch('/:trackingId', async (req, res) => {
 
         if (statusChanged || destinationChanged) {
             let note = req.body.history.notes;
-            console.log(req.body)
+            console.log(`backend patch data: ${req.body}`)
 
             if (!note) {
                 if (statusChanged && destinationChanged) {
