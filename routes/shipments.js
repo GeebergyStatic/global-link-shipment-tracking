@@ -99,7 +99,7 @@ router.patch('/:trackingId', async (req, res) => {
             newDestination && newDestination !== oldDestination;
 
         if (statusChanged || destinationChanged) {
-            let note = req.body.statusNotes;
+            let note = req.body.history.notes;
 
             if (!note) {
                 if (statusChanged && destinationChanged) {
