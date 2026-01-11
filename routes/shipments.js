@@ -31,6 +31,7 @@ router.get('/:trackingId', async (req, res) => {
 
 // POST create shipment
 router.post('/', async (req, res) => {
+    console.log(`backend check: ${JSON.stringify(req.body.shipmentDetails)}`);
     try {
         const shipment = new Shipment({
             trackingId: req.body.trackingId,
