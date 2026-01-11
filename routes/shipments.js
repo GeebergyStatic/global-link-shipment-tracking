@@ -31,7 +31,11 @@ router.get('/:trackingId', async (req, res) => {
 
 // POST create shipment
 router.post('/', async (req, res) => {
-    console.log(`backend check: ${JSON.stringify(req.body.shipmentDetails)}`);
+    const historyNote =
+        req.body.shipmentDetails?.historyNotes?.trim() ||
+        req.body.history?.notes?.trim() ||
+        'Shipment sent out!';
+
     try {
         const shipment = new Shipment({
             trackingId: req.body.trackingId,
@@ -40,7 +44,7 @@ router.post('/', async (req, res) => {
                 date: new Date(),
                 location: req.body.shipmentDetails.origin,
                 status: req.body.shipmentDetails.status,
-                notes: req.body.shipmentDetails.history?.[0]?.notes ?? 'Shipment sent out!'
+                notes: historyNote
             }],
 
             shipper: req.body.shipper,
